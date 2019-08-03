@@ -54,11 +54,15 @@ export default class Graph extends React.Component {
   }
 
   async requestData(){
-    const response = await fetch(`${this.dataUrl}?start=${this.state.startDate}&end=${this.state.endDate}`);
-    console.log()
-    const data = await this.dataCleaner(response.json());
-    console.log('data from request: ', data)
-    this.setState({'data': data})
+    // const response = await fetch(`${this.dataUrl}?start=${this.state.startDate}&end=${this.state.endDate}`);
+    // console.log('response:', response)
+    // const data = await this.dataCleaner(response.json());
+    // console.log('data from request: ', data)
+    // this.setState({'data': data})
+    fetch(`${this.dataUrl}?start=${this.state.startDate}&end=${this.state.endDate}`)
+      .then(res => res.json())
+      .then(json => this.dataCleaner(json.bpi))
+      .then(data => this.setState({data}))
   }
 
   render(){
@@ -67,7 +71,7 @@ export default class Graph extends React.Component {
         <GraphDisplay data={this.state.data}></GraphDisplay>
         <GraphOptions pickDate={this.pickDate}
           startDate={this.state.startDate}
-          startDate={this.state.startDate}>
+          endDate={this.state.startDate}>
         </GraphOptions>
       </React.Fragment>
     )
